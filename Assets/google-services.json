@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "817453991281",
+    "firebase_url": "https://car-racing-1886a-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "car-racing-1886a",
+    "storage_bucket": "car-racing-1886a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:817453991281:android:0321be036ae5118446a2d0",
+        "android_client_info": {
+          "package_name": "com.UnityTechnologies.com.unity.template.urpblank"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCbfc7DQLkasawjrNcp82iG8KJQkIuCdyo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
