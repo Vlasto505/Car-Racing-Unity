@@ -193,7 +193,7 @@ MonoBehaviour:
   - {fileID: 513840477}
   - {fileID: 936759541}
   - {fileID: 863375400}
-  moveSpeed: 2
+  moveSpeed: 20
   turnSpeed: 6
   waypointReachDistance: 4
 --- !u!54 &48891022
