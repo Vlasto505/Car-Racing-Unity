@@ -71,10 +71,11 @@ public class GameManager : MonoBehaviour
             : 50;
 
         Debug.Log($"{(playerWon ? "VYHRAL SI!" : "PREHRAL SI!")} | Level: {levelId} | Čas: {raceTime:F2}s | Skóre: {finalScore}");
-        DatabaseManager.Instance?.SaveScore("user1", finalScore);
         if (raceHUD != null)
         {
             raceHUD.ShowResult(playerWon, raceTime, finalScore);
         }
+
+        DatabaseManager.Instance?.SaveScore("user1", finalScore);
     }
 }
