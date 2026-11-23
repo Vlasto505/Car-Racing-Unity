@@ -15,6 +15,14 @@ public class CarController : MonoBehaviour
     private float moveInput;
     private float turnInput;
 
+    [Header("Upgrade násobič")]
+    [SerializeField] private float speedUpgradeMultiplier = 1f;
+
+    public void ApplySpeedMultiplier(float multiplier)
+    {
+        speedUpgradeMultiplier = Mathf.Max(0.1f, multiplier);
+    }
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -35,25 +43,28 @@ public class CarController : MonoBehaviour
 
     private void HandleMovement()
     {
+        float effectiveMaxSpeed = maxSpeed * speedUpgradeMultiplier;
+        float effectiveAcceleration = acceleration * speedUpgradeMultiplier;
+
         // Aktuálna rýchlosť dopredu
         CurrentSpeed = Vector3.Dot(rb.linearVelocity, transform.forward);
 
-        if (moveInput > 0f && CurrentSpeed < maxSpeed)
+        if (moveInput > 0f && CurrentSpeed < effectiveMaxSpeed)
         {
-            rb.AddForce(transform.forward * (moveInput * acceleration), ForceMode.Acceleration);
+            rb.AddForce(transform.forward * (moveInput * effectiveAcceleration), ForceMode.Acceleration);
         }
         else if (moveInput < 0f)
         {
             // Brzdenie alebo cúvanie
-            float force = CurrentSpeed > 0.5f ? brakeForce : acceleration * 0.5f;
+            float force = CurrentSpeed > 0.5f ? brakeForce : effectiveAcceleration * 0.5f;
             rb.AddForce(transform.forward * (moveInput * force), ForceMode.Acceleration);
         }
 
         // Obmedzenie maximálnej rýchlosti
         Vector3 flatVel = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
-        if (flatVel.magnitude > maxSpeed)
+        if (flatVel.magnitude > effectiveMaxSpeed)
         {
-            Vector3 limitedVel = flatVel.normalized * maxSpeed;
+            Vector3 limitedVel = flatVel.normalized * effectiveMaxSpeed;
             rb.linearVelocity = new Vector3(limitedVel.x, rb.linearVelocity.y, limitedVel.z);
         }
     }

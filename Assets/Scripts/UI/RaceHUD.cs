@@ -14,6 +14,47 @@ public class RaceHUD : MonoBehaviour
     [Tooltip("Prepočet z Unity jednotiek/s na km/h (napr. 3.6f pre reálnejší pocit)")]
     public float speedMultiplier = 3.6f;
 
+    [Header("Win Reward")]
+    [SerializeField] private int winReward = 300;
+
+    private const string CurrencyKey = "PlayerCurrency";
+    private int pickupPointsThisRace = 0;
+    private bool rewardGranted = false;
+
+    public void AddPickupPoints(int points)
+    {
+        if (points <= 0) return;
+        pickupPointsThisRace += points;
+    }
+
+    public void SetTargetCar(GameObject activeCar)
+    {
+        if (activeCar == null) return;
+
+        CarController controller = activeCar.GetComponent<CarController>();
+        if (controller == null)
+        {
+            controller = activeCar.GetComponentInChildren<CarController>();
+        }
+
+        if (controller != null)
+        {
+            playerCar = controller;
+        }
+        else
+        {
+            Debug.LogWarning($"RaceHUD: Na objekte '{activeCar.name}' sa nenašiel komponent CarController.");
+        }
+    }
+
+    public void SetTargetCar(CarController controller)
+    {
+        if (controller != null)
+        {
+            playerCar = controller;
+        }
+    }
+
     private void Update()
     {
         if (playerCar != null && speedText != null)
@@ -30,6 +71,23 @@ public class RaceHUD : MonoBehaviour
 
     public void ShowResult(bool playerWon, float raceTime, int finalScore)
     {
+        int winBonus = 0;
+
+        if (!rewardGranted)
+        {
+            rewardGranted = true;
+
+            if (playerWon)
+            {
+                winBonus = winReward + Mathf.Max(0, finalScore);
+                int currentCurrency = PlayerPrefs.GetInt(CurrencyKey, 0);
+                PlayerPrefs.SetInt(CurrencyKey, currentCurrency + winBonus);
+                PlayerPrefs.Save();
+            }
+        }
+
+        int totalCurrency = PlayerPrefs.GetInt(CurrencyKey, 0);
+
         if (pausePanel != null)
             pausePanel.SetActive(false);
 
@@ -39,7 +97,13 @@ public class RaceHUD : MonoBehaviour
         if (resultText != null)
         {
             string outcome = playerWon ? "VYHRAL SI!" : "PREHRAL SI!";
-            resultText.text = $"{outcome}\nČas: {raceTime:F2} s\nSkóre: {finalScore}";
+            resultText.text =
+                $"{outcome}\n" +
+                $"Čas: {raceTime:F2} s\n" +
+                $"Skóre: {finalScore}\n" +
+                $"Pickup body v preteku: +{pickupPointsThisRace}\n" +
+                $"Bonus za výhru: +{winBonus}\n" +
+                $"Celkové body: {totalCurrency}";
         }
     }
 
