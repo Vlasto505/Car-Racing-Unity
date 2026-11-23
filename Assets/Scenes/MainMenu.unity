@@ -3298,7 +3298,7 @@ MonoBehaviour:
   levelSelectPanel: {fileID: 1819782099}
   upgradesPanel: {fileID: 1788636592}
   topScoresPanel: {fileID: 1291428642}
-  level1SceneName: SandboxTest
+  level1SceneName: Level1
   level2SceneName: Level1
   level3SceneName: Level2
 --- !u!4 &1369709618
